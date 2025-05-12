@@ -22,7 +22,7 @@ public class CustomerRewards {
         private Date purchaseDate;
 
         @Column(name = "rewards_points")
-        private Integer rewardsPoints;
+        private Double rewardsPoints;
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "CUSTOMER_ID", nullable = false)

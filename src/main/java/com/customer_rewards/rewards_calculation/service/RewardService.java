@@ -70,7 +70,7 @@ public class RewardService {
     public TransactionResponseDto createRewards(Long customerId, TransactionRequestDto transactionRequestDto) {
 
         CustomerResponseDto customerResponseDto = new CustomerResponseDto();
-        Integer rewardsPoints = 0;
+        Double rewardsPoints = 0.0;
         Integer spent = transactionRequestDto.getPurchaseAmount();
 
         Customer customer = customerRepository.findById(customerId)
@@ -83,7 +83,7 @@ public class RewardService {
         }
 
         if (spent != null) {
-            rewardsPoints = calculateRewards(spent);
+            rewardsPoints = calculateRewardPoints(spent);
         }
         CustomerRewards customerSpendRewards = new CustomerRewards();
         customerSpendRewards.setCustomer(customer);
@@ -101,22 +101,6 @@ public class RewardService {
         customerResponseDto.setAddress(customerRewards.getCustomer().getAddress());
 
         return  new TransactionResponseDto(customerRewards.getPurchaseAmount(),customerRewards.getPurchaseDate(),customerRewards.getRewardsPoints(),customerResponseDto);
-
-    }
-
-
-
-    public int calculateRewards(Integer purchaseAmount){
-
-        if (purchaseAmount >= 100) {
-            return ((purchaseAmount - 100) * 2 + 50);
-        }
-
-        else if (purchaseAmount >= 50) {
-            return (purchaseAmount - 50);
-
-        }
-        return 0;
 
     }
 

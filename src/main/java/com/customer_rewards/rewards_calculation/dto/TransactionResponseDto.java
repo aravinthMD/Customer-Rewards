@@ -14,7 +14,7 @@ public class TransactionResponseDto {
 
     private Date PurchaseDate;
 
-    private Integer rewardPoints;
+    private Double rewardPoints;
 
     @JsonProperty("customerDetail")
     private CustomerResponseDto customerResponseDto;

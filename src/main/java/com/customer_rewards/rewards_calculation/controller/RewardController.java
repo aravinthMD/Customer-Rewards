@@ -1,7 +1,6 @@
 package com.customer_rewards.rewards_calculation.controller;
 
 import com.customer_rewards.rewards_calculation.dto.*;
-import com.customer_rewards.rewards_calculation.repository.CustomerRepository;
 import com.customer_rewards.rewards_calculation.service.RewardService;
 import com.customer_rewards.rewards_calculation.util.ApiResponse;
 import jakarta.validation.Valid;

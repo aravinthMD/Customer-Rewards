@@ -26,6 +26,7 @@ public class RewardService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Transactional
     public CustomerResponseDto createCustomer(CustomerRequestDto customerRequestDto){
 
         Customer customer = new Customer();
@@ -66,7 +67,7 @@ public class RewardService {
         return new CustomerResponseDto(updatedCustomer.getId(), updatedCustomer.getFirstName(), updatedCustomer.getLastName(), updatedCustomer.getEmail(), updatedCustomer.getPhone(), updatedCustomer.getAddress());
     }
 
-
+     @Transactional
     public TransactionResponseDto createRewards(Long customerId, TransactionRequestDto transactionRequestDto) {
 
         CustomerResponseDto customerResponseDto = new CustomerResponseDto();

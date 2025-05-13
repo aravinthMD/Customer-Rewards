@@ -21,10 +21,6 @@ public class RewardController {
     @Autowired
     private RewardService customerRewardService;
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-
     @PostMapping(path = "/saveCustomer")
     public ResponseEntity<ApiResponse<CustomerResponseDto>> createCustomer(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
 

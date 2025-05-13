@@ -118,8 +118,8 @@ mvn clean install
     "customerDetail": {
       "id": 1,
       "firstName": "Aravinth",
-      "lastName": "M",
-      "email": "aravinth.mad@gmail.com",
+      "lastName": "MD",
+      "email": "aravinth.md@gmail.com",
       "phone": "8754809950",
       "address": "ddd"
     },
@@ -129,7 +129,7 @@ mvn clean install
   "timestamp": 1747121981689
 }
 ```
-- **To get Customer Purchase history** --location 'http://localhost:8080/api/{customerId}/monthly-transactions' \
+- **To get Customer Monthy Transactional Reward Points** --location 'http://localhost:8080/api/{customerId}/monthly-transactions' \
     - **Method**: GET
         - To populate past three months data 
         - *Response*
@@ -137,10 +137,10 @@ mvn clean install
 {
   "customerId": 1,
   "firstName": "Aravinth",
-  "lastName": "M",
-  "email": "aravinth.mad@gmail.com",
+  "lastName": "MD",
+  "email": "aravinth.md@gmail.com",
   "phone": "8754809950",
-  "address": "ddd",
+  "address": "123, Park Street",
   "monthlyRecords": [
     {
       "month": 4,

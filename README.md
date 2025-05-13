@@ -36,3 +36,117 @@ http://localhost:8080/v3/api-docs/
 To build project, run command from terminal with
 mvn clean install
 
+# API Details
+- **To save Customer** -'http://localhost:8080/api/saveCustomer'
+- **Method**: POST
+  --data
+```json
+{
+  "firstName" : "Aravinth",
+  "lastName" : "MD",
+  "email" : "aravinth.md@gmail.com",
+  "phone" : "8754809950",
+  "address" : "123, Park Street"
+}
+```
+
+- **Response**:
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 1,
+    "firstName": "Aravinth",
+    "lastName": "MD",
+    "email": "aravinth.md@gmail.com",
+    "phone": "8754809950",
+    "address": "123, Park Street"
+  },
+  "message": "Customer created successfully.",
+  "timestamp": 1747121901708
+}
+```
+- **To Update Customer** -'http://localhost:8080/api/{customerId}/updateCustomer'
+- **Method**: PUT\
+  --data
+```json
+{
+
+  "firstName" : "Aravinth",
+  "lastName" : "MD",
+  "email" : "aravinth.md@gmail.com",
+  "phone" : "8754809950",
+  "address" : "123, Northern Park Street"
+
+}
+  ```
+- **Response**:
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 1,
+    "firstName": "Aravinth",
+    "lastName": "MD",
+    "email": "aravinth.md@gmail.com",
+    "phone": "8754809950",
+    "address": "123, Northern Park Street"
+  },
+  "message": "Customer Updated successfully.",
+  "timestamp": 1747121928560
+}
+```
+
+
+- **To save Purchase Order** -'http://localhost:8080/api/{customerId}/saveReward'
+- **Method**: POST
+
+  --data
+```json
+{
+  "purchaseAmount": 120,
+  "purchaseDate": "2025-04-15T02:55:19.963Z"
+}
+```
+- **Response**:
+```json
+ {
+  "status": "success",
+  "data": {
+    "purchaseAmount": 120,
+    "rewardPoints": 90.0,
+    "customerDetail": {
+      "id": 1,
+      "firstName": "Aravinth",
+      "lastName": "M",
+      "email": "aravinth.mad@gmail.com",
+      "phone": "8754809950",
+      "address": "ddd"
+    },
+    "purchaseDate": "2025-04-15"
+  },
+  "message": "Transactions Saved successfully.",
+  "timestamp": 1747121981689
+}
+```
+- **To get Customer Purchase history** --location 'http://localhost:8080/api/{customerId}/monthly-transactions' \
+    - **Method**: GET
+        - To populate past three months data 
+        - *Response*
+```json
+{
+  "customerId": 1,
+  "firstName": "Aravinth",
+  "lastName": "M",
+  "email": "aravinth.mad@gmail.com",
+  "phone": "8754809950",
+  "address": "ddd",
+  "monthlyRecords": [
+    {
+      "month": 4,
+      "rewardPoints": 90.0
+    }
+  ],
+  "totalRewards": 90.0
+}
+```

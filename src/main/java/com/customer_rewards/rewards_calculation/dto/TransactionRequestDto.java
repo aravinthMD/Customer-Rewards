@@ -1,6 +1,7 @@
 package com.customer_rewards.rewards_calculation.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class TransactionRequestDto {
     private Integer purchaseAmount;
 
     @NotNull(message = "PurchaseDate must not be null")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date PurchaseDate;
 
 }

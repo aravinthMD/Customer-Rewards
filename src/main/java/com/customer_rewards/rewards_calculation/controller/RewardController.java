@@ -37,7 +37,7 @@ public class RewardController {
     @PutMapping(path = "{customerId}/updateCustomer",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse<CustomerResponseDto>> updateCustomer(@NotNull(message = "Customer ID is Mandatory") @PathVariable long customerId, @RequestBody CustomerRequestDto customerRequestDto) {
+    public ResponseEntity<ApiResponse<CustomerResponseDto>> updateCustomer(@NotNull(message = "Customer ID is Mandatory") @PathVariable long customerId,@Valid @RequestBody CustomerRequestDto customerRequestDto) {
         CustomerResponseDto updatedCustomer = customerRewardService.updateCustomer(customerId, customerRequestDto);
 
         ApiResponse<CustomerResponseDto> response = new ApiResponse<>(

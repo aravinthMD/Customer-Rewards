@@ -3,6 +3,7 @@ package com.customer_rewards.rewards_calculation.service;
 import com.customer_rewards.rewards_calculation.dto.*;
 import com.customer_rewards.rewards_calculation.entity.Customer;
 import com.customer_rewards.rewards_calculation.entity.CustomerRewards;
+import com.customer_rewards.rewards_calculation.exception.customException.UserAlreadyExistsException;
 import com.customer_rewards.rewards_calculation.repository.CustomerRepository;
 import com.customer_rewards.rewards_calculation.repository.CustomerRewardRepository;
 import jakarta.transaction.Transactional;
@@ -28,6 +29,12 @@ public class RewardService {
 
     @Transactional
     public CustomerResponseDto createCustomer(CustomerRequestDto customerRequestDto){
+
+        if (customerRepository.existsByEmail(customerRequestDto.getEmail())) {
+            throw new UserAlreadyExistsException(
+                    "Customer with the email " + customerRequestDto.getEmail() + " already exists."
+            );
+        }
 
         Customer customer = new Customer();
         customer.setFirstName(customerRequestDto.getFirstName());

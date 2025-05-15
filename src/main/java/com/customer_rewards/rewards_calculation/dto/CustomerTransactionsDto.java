@@ -18,4 +18,7 @@ public class CustomerTransactionsDto {
     private List<MonthlyRewardDto> monthlyRecords;
     private Double totalRewards;
 
+    public CustomerTransactionsDto() {
+
+    }
 }

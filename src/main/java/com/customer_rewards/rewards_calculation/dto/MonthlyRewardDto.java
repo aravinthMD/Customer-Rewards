@@ -9,4 +9,7 @@ public class MonthlyRewardDto {
     private Integer month;
     private Double rewardPoints;
 
+    public MonthlyRewardDto() {
+
+    }
 }

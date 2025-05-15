@@ -19,6 +19,7 @@ public class CustomerRequestDto {
     private String lastName;
     @Email(message = "Email should be valid")
     @Schema(description = "Valid email address of the Customer", example = "john.wayne@gmail.com")
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     @Pattern(regexp = "^[0-9]+$", message = "Only numbers allowed in Phone number")

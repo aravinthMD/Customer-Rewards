@@ -18,4 +18,8 @@ public class TransactionResponseDto {
 
     @JsonProperty("customerDetail")
     private CustomerResponseDto customerResponseDto;
+
+    public TransactionResponseDto() {
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.customer_rewards.rewards_calculation.exception;
 
+import com.customer_rewards.rewards_calculation.exception.customException.CustomerNotFoundException;
 import com.customer_rewards.rewards_calculation.util.ErrorResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -141,6 +142,15 @@ public class GlobalExceptionHandler {
         errorDetails.put("path", request.getRequestURI());
 
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleCustomerNotFound(CustomerNotFoundException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
 }

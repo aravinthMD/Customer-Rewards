@@ -3,6 +3,7 @@ package com.customer_rewards.rewards_calculation.service;
 import com.customer_rewards.rewards_calculation.dto.*;
 import com.customer_rewards.rewards_calculation.entity.Customer;
 import com.customer_rewards.rewards_calculation.entity.CustomerRewards;
+import com.customer_rewards.rewards_calculation.exception.customException.CustomerNotFoundException;
 import com.customer_rewards.rewards_calculation.exception.customException.UserAlreadyExistsException;
 import com.customer_rewards.rewards_calculation.repository.CustomerRepository;
 import com.customer_rewards.rewards_calculation.repository.CustomerRewardRepository;
@@ -51,7 +52,7 @@ public class RewardService {
     public CustomerResponseDto updateCustomer(Long customerId, CustomerRequestDto customerRequestDto) {
 
         Customer existingCustomer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + customerId));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with ID: " + customerId));
 
         if (customerRequestDto.getFirstName() != null) {
             existingCustomer.setFirstName(customerRequestDto.getFirstName());

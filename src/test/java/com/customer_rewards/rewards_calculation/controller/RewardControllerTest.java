@@ -227,11 +227,11 @@ public class RewardControllerTest {
 
         List<MonthlyRewardDto> monthlyRewardDtoList = new ArrayList<>();
         MonthlyRewardDto monthlyRewardDto1 = new MonthlyRewardDto();
-        monthlyRewardDto1.setMonth(4);
+        monthlyRewardDto1.setPurchaseDate(new Date(15-05-2025));
         monthlyRewardDto1.setRewardPoints(150.0);
         monthlyRewardDtoList.add(monthlyRewardDto1);
         MonthlyRewardDto monthlyRewardDto2 = new MonthlyRewardDto();
-        monthlyRewardDto2.setMonth(5);
+        monthlyRewardDto2.setPurchaseDate(new Date(15-04-2025));
         monthlyRewardDto2.setRewardPoints(100.0);
         monthlyRewardDtoList.add(monthlyRewardDto2);
 

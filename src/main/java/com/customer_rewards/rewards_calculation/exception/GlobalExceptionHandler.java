@@ -1,6 +1,6 @@
 package com.customer_rewards.rewards_calculation.exception;
 
-import com.customer_rewards.rewards_calculation.exception.customException.CustomerNotFoundException;
+import com.customer_rewards.rewards_calculation.exception.customException.*;
 import com.customer_rewards.rewards_calculation.util.ErrorResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -14,6 +14,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -151,6 +152,55 @@ public class GlobalExceptionHandler {
         errorResponse.put("error", ex.getMessage());
         errorResponse.put("timestamp", System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(NullArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, Object>> handleNullArgumentException(NullArgumentException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+
+    }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidEmailException(InvalidEmailException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidPhoneException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidPhoneException(InvalidPhoneException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidPurchaseAmountException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidPurchaseAmount(InvalidPurchaseAmountException ex) {
+
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidPatternException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, Object>> handleInvalidPatternException(InvalidPatternException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
 }

@@ -23,6 +23,13 @@ public class RewardController {
     @Autowired
     private RewardService customerRewardService;
 
+
+    /**
+     * Creates a new customer.
+     *
+     * @param customerRequestDto the customer request payload (validated with @Valid)
+     * @return a ResponseEntity containing an ApiResponse with the CustomerResponseDto and a success message
+     */
     @Operation(
             summary = "Create a Customer",
             description = "Creates a new Customer record with the provided details."
@@ -40,6 +47,13 @@ public class RewardController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Updates the Customer record with the provided details.
+     *
+     * @param customerId the unique identifier of the customer (must not be null)
+     * @param customerRequestDto the customer details to update (validated with @Valid)
+     * @return a ResponseEntity containing an ApiResponse with the updated CustomerResponseDto and a success message
+     */
     @Operation(
             summary = "Update the Customer",
             description = "Updates the Customer record with the provided details."
@@ -65,6 +79,13 @@ public class RewardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Saves the customer transaction details.
+     *
+     * @param customerId            the unique identifier of the customer (must not be null)
+     * @param transactionRequestDto the transaction request payload (validated with @Valid)
+     * @return a ResponseEntity containing an ApiResponse with the TransactionResponseDto and a success message
+     */
     @Operation(
             summary = "Save the Transaction",
             description = "Saves the Customer Transaction Details"
@@ -91,6 +112,12 @@ public class RewardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Fetches the monthly transaction reward details for the specified customer.
+     *
+     * @param customerId the unique identifier of the customer
+     * @return a ResponseEntity containing a CustomerTransactionsDto with the customer's monthly transaction rewards
+     */
 
     @Operation(
             summary = "Get Customer Transaction by ID",

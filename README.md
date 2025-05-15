@@ -139,14 +139,18 @@ mvn clean install
   "firstName": "Aravinth",
   "lastName": "MD",
   "email": "aravinth.md@gmail.com",
-  "phone": "8754809950",
+  "phone": "8754089950",
   "address": "123, Park Street",
   "monthlyRecords": [
     {
-      "month": 4,
-      "rewardPoints": 90.0
+      "purchaseDate": "2025-09-15",
+      "rewardPoints": 210.0
+    },
+    {
+      "purchaseDate": "2025-05-15",
+      "rewardPoints": 150.0
     }
   ],
-  "totalRewards": 90.0
+  "totalRewards": 360.0
 }
 ```

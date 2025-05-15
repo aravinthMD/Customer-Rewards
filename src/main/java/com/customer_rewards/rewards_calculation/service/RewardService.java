@@ -3,13 +3,14 @@ package com.customer_rewards.rewards_calculation.service;
 import com.customer_rewards.rewards_calculation.dto.*;
 import com.customer_rewards.rewards_calculation.entity.Customer;
 import com.customer_rewards.rewards_calculation.entity.CustomerRewards;
-import com.customer_rewards.rewards_calculation.exception.customException.CustomerNotFoundException;
-import com.customer_rewards.rewards_calculation.exception.customException.UserAlreadyExistsException;
+import com.customer_rewards.rewards_calculation.exception.customException.*;
 import com.customer_rewards.rewards_calculation.repository.CustomerRepository;
 import com.customer_rewards.rewards_calculation.repository.CustomerRewardRepository;
+import com.customer_rewards.rewards_calculation.util.constants.ValidationConstants;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -28,12 +29,51 @@ public class RewardService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    /**
+     * Creates a new customer after validating the input details.
+     *
+     * @param customerRequestDto the customer request payload
+     * @return the response DTO with the created customer details
+     */
     @Transactional
     public CustomerResponseDto createCustomer(CustomerRequestDto customerRequestDto){
 
+        String pattern = "^[A-Za-z]+$";
+
+        if (customerRequestDto == null) {
+            throw new NullArgumentException("Customer request cannot be null.");
+        }
+
+        if (!StringUtils.hasText(customerRequestDto.getFirstName())) {
+            throw new NullArgumentException("First name cannot be null or empty.");
+        }
+        if (!ValidationConstants.NAME_PATTERN.matcher(customerRequestDto.getFirstName()).matches()) {
+            throw new InvalidPatternException("First name must contain only alphabets.");
+        }
+        if (!StringUtils.hasText(customerRequestDto.getLastName())) {
+            throw new NullArgumentException("Last name cannot be null or empty.");
+        }
+        if (!ValidationConstants.NAME_PATTERN.matcher(customerRequestDto.getLastName()).matches()) {
+            throw new InvalidPatternException("Last name must contain only alphabets.");
+        }
+        if (!StringUtils.hasText(customerRequestDto.getEmail())) {
+            throw new NullArgumentException("Email cannot be null or empty.");
+        }
+        if (!StringUtils.hasText(customerRequestDto.getPhone())) {
+            throw new NullArgumentException("Phone number cannot be null or empty.");
+        }
+
+        if (!customerRequestDto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            throw new InvalidEmailException("Invalid email format: " + customerRequestDto.getEmail());
+        }
+
+        if (!customerRequestDto.getPhone().matches("^\\d{10}$")) {
+            throw new InvalidPhoneException("Phone number must be exactly 10 digits.");
+        }
+
         if (customerRepository.existsByEmail(customerRequestDto.getEmail())) {
             throw new UserAlreadyExistsException(
-                    "Customer with the email " + customerRequestDto.getEmail() + " already exists."
+                    "Customer with email " + customerRequestDto.getEmail() + " already exists."
             );
         }
 
@@ -48,42 +88,98 @@ public class RewardService {
 
     }
 
+    /**
+     * Updates an existing customer with the provided details.
+     *
+     * @param customerId the ID of the customer to update (must not be null)
+     * @param customerRequestDto the customer data used for the update (must not be null)
+     * @return a CustomerResponseDto containing the updated customer information
+     */
     @Transactional
     public CustomerResponseDto updateCustomer(Long customerId, CustomerRequestDto customerRequestDto) {
+
+        if (customerId == null) {
+            throw new NullArgumentException("Customer ID cannot be null.");
+        }
+
+        if (customerRequestDto == null) {
+            throw new NullArgumentException("Customer request cannot be null.");
+        }
+
+        if (!StringUtils.hasText(customerRequestDto.getFirstName())) {
+            throw new NullArgumentException("First name cannot be empty.");
+        }
+        if (!ValidationConstants.NAME_PATTERN.matcher(customerRequestDto.getFirstName()).matches()) {
+            throw new InvalidPatternException("First name must contain only alphabets.");
+        }
+        if (!StringUtils.hasText(customerRequestDto.getLastName())) {
+            throw new NullArgumentException("Last name cannot be empty.");
+        }
+        if (!ValidationConstants.NAME_PATTERN.matcher(customerRequestDto.getLastName()).matches()) {
+            throw new InvalidPatternException("Last name must contain only alphabets.");
+        }
+        if (!StringUtils.hasText(customerRequestDto.getEmail())) {
+            throw new NullArgumentException("Email cannot be empty.");
+        }
+        if (!StringUtils.hasText(customerRequestDto.getPhone())) {
+            throw new NullArgumentException("Phone number cannot be empty.");
+        }
+
+        if (!customerRequestDto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            throw new InvalidEmailException("Invalid email format: " + customerRequestDto.getEmail());
+        }
+
+        if (!customerRequestDto.getPhone().matches("^\\d{10}$")) {
+            throw new InvalidPhoneException("Phone number must be exactly 10 digits.");
+        }
+
 
         Customer existingCustomer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with ID: " + customerId));
 
-        if (customerRequestDto.getFirstName() != null) {
             existingCustomer.setFirstName(customerRequestDto.getFirstName());
-        }
-        if (customerRequestDto.getLastName() != null) {
             existingCustomer.setLastName(customerRequestDto.getLastName());
-        }
-        if (customerRequestDto.getEmail() != null) {
             existingCustomer.setEmail(customerRequestDto.getEmail());
-        }
-        if (customerRequestDto.getPhone() != null) {
             existingCustomer.setPhone(customerRequestDto.getPhone());
-        }
-        if (customerRequestDto.getAddress() != null) {
             existingCustomer.setAddress(customerRequestDto.getAddress());
-        }
 
         Customer updatedCustomer = customerRepository.save(existingCustomer);
 
         return new CustomerResponseDto(updatedCustomer.getId(), updatedCustomer.getFirstName(), updatedCustomer.getLastName(), updatedCustomer.getEmail(), updatedCustomer.getPhone(), updatedCustomer.getAddress());
     }
 
+    /**
+     * Creates a reward transaction for the specified customer.
+     *
+     * @param customerId the unique identifier of the customer (must not be null)
+     * @param transactionRequestDto the transaction request payload containing purchase amount and date
+     * @return a TransactionResponseDto containing the purchase amount, purchase date, rewards points, and customer details
+     */
      @Transactional
     public TransactionResponseDto createRewards(Long customerId, TransactionRequestDto transactionRequestDto) {
 
-        CustomerResponseDto customerResponseDto = new CustomerResponseDto();
+         if (customerId == null) {
+             throw new NullArgumentException("Customer ID cannot be null.");
+         }
+
+         if (transactionRequestDto == null) {
+             throw new NullArgumentException("Customer Transaction request cannot be null.");
+         }
+
+         if(transactionRequestDto.getPurchaseAmount() == null){
+             throw new NullArgumentException("Customer Purchase Amount cannot be null.");
+         }
+
+         if (transactionRequestDto.getPurchaseAmount() <= 0) {
+             throw new InvalidPurchaseAmountException("Purchase amount must be greater than zero. Provided: $" + transactionRequestDto.getPurchaseAmount());
+         }
+
+         CustomerResponseDto customerResponseDto = new CustomerResponseDto();
         Double rewardsPoints = 0.0;
         Integer spent = transactionRequestDto.getPurchaseAmount();
 
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+         Customer customer = customerRepository.findById(customerId)
+                 .orElseThrow(() -> new CustomerNotFoundException("Customer not found with ID: " + customerId));
 
         if (transactionRequestDto.getPurchaseDate() == null) {
             Calendar calendar = Calendar.getInstance();
@@ -113,10 +209,22 @@ public class RewardService {
 
     }
 
+    /**
+     * Retrieves the monthly rewards for the specified customer for transactions in the last three months.
+     *
+     * @param customerId the unique identifier of the customer
+     * @return a CustomerTransactionsDto containing the customer's details, a list of monthly reward transactions, and the total reward points
+     * @throws NullArgumentException if the customerId is null
+     * @throws CustomerNotFoundException if no customer is found with the provided customerId
+     */
     public CustomerTransactionsDto getCustomerMonthlyRewards(Long customerId){
 
+        if (customerId == null) {
+            throw new NullArgumentException("Customer ID cannot be null.");
+        }
+
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + customerId));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found with ID: " + customerId));
 
         LocalDate thresholdDate = LocalDate.now().minusMonths(3);
 
@@ -125,22 +233,26 @@ public class RewardService {
                 .filter(tx -> !tx.getPurchaseDate().toLocalDate().isBefore(thresholdDate))
                 .collect(Collectors.toList());
 
-        recentTransactions.forEach(tx -> System.out.println("Transaction Date: " + tx.getPurchaseDate().toLocalDate()));
-
-        // Aggregating transaction amounts per month
-        Map<Integer, Double> monthlyAggregates = recentTransactions.stream()
+        // Aggregating transaction amounts per month while keeping the purchase date
+        Map<Integer, List<MonthlyRewardDto>> monthlyAggregates = recentTransactions.stream()
                 .collect(Collectors.groupingBy(
-                        tx -> tx.getPurchaseDate().toLocalDate().getMonthValue(),
-                        Collectors.summingDouble(tx -> calculateRewardPoints(tx.getPurchaseAmount()))
+                        tx -> tx.getPurchaseDate().toLocalDate().getMonthValue(), // Grouping by month
+                        Collectors.mapping(
+                                tx -> new MonthlyRewardDto(
+                                        tx.getPurchaseDate(),
+                                        calculateRewardPoints(tx.getPurchaseAmount())
+                                ),
+                                Collectors.toList()
+                        )
                 ));
 
-        Double totalRewards  = monthlyAggregates.entrySet().stream().mapToDouble(e -> e.getValue()).sum();
+        double totalRewards = recentTransactions.stream()
+                .mapToDouble(tx -> calculateRewardPoints(tx.getPurchaseAmount()))
+                .sum();
 
-
-        // Converting to DTO format
         List<MonthlyRewardDto> monthlyRecords = monthlyAggregates.entrySet().stream()
-                .map(e -> new MonthlyRewardDto(e.getKey(), e.getValue()))
-                .sorted(Comparator.comparing(MonthlyRewardDto::getMonth).reversed())
+                .flatMap(entry -> entry.getValue().stream())
+                .sorted(Comparator.comparing(MonthlyRewardDto::getPurchaseDate).reversed())
                 .collect(Collectors.toList());
 
         return new CustomerTransactionsDto(

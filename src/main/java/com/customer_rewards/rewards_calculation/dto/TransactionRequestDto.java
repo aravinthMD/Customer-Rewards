@@ -16,13 +16,10 @@ import java.sql.Date;
 @NoArgsConstructor
 public class TransactionRequestDto {
 
-    @NotNull(message = "Purchase amount must not be null")
     @PositiveOrZero(message = "Purchase amount must be zero or positive")
-
     @Schema(description = "Purchase Amount of the Customer", example = "120")
     private Integer purchaseAmount;
 
-    @NotNull(message = "PurchaseDate must not be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Schema(description = "The date and time of the purchase", example = "2025-05-13T10:38:41.188Z")
     private Date purchaseDate;

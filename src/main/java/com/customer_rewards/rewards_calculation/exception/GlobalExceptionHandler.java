@@ -30,6 +30,12 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handles RuntimeExceptions by returning a BAD_REQUEST error response.
+     *
+     * @param ex the runtime exception encountered
+     * @return a ResponseEntity with an error response and a BAD_REQUEST status
+     */
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -39,8 +45,12 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-
-    // Fallback handler for all other exceptions
+    /**
+     * Handles all exceptions by returning an INTERNAL_SERVER_ERROR response.
+     *
+     * @param ex the exception encountered
+     * @return a ResponseEntity with an ErrorResponse and INTERNAL_SERVER_ERROR status
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         ErrorResponse error = new ErrorResponse(
@@ -51,7 +61,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // Handling validation errors from @Valid annotated request bodies
+    /**
+     * Handles validation errors and returns a BAD_REQUEST response.
+     *
+     * @param ex the MethodArgumentNotValidException containing validation errors
+     * @return a ResponseEntity with an error response and status BAD_REQUEST
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<String> errorMessages = ex.getBindingResult()
@@ -74,6 +89,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles ConstraintViolationException by returning a BAD_REQUEST error response.
+     *
+     * @param ex the ConstraintViolationException containing validation error details
+     * @return a ResponseEntity with an ErrorResponse and BAD_REQUEST status
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
         String errorMessage = ex.getConstraintViolations()
@@ -89,6 +110,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles malformed JSON requests by returning a BAD_REQUEST error response.
+     *
+     * @param ex the HttpMessageNotReadableException indicating the message was not readable
+     * @param request the current WebRequest
+     * @return a ResponseEntity containing the error response and a BAD_REQUEST status
+     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
             HttpMessageNotReadableException ex, WebRequest request) {
@@ -104,6 +132,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles database access errors by returning an INTERNAL_SERVER_ERROR response.
+     *
+     * @param ex the DataAccessException that occurred
+     * @param request the current WebRequest
+     * @return a ResponseEntity containing an ErrorResponse and INTERNAL_SERVER_ERROR status
+     */
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponse> handleDataAccessException(DataAccessException ex, WebRequest request) {
         String message = "A database error occurred.";
@@ -118,6 +153,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Handles MethodArgumentTypeMismatchException by returning a BAD_REQUEST response with details about the type mismatch.
+     *
+     * @param ex the exception indicating the type mismatch in request parameters
+     * @param request the current WebRequest
+     * @return a ResponseEntity containing an ErrorResponse and a BAD_REQUEST status
+     */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex,
                                                             WebRequest request) {
@@ -130,7 +172,13 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), message, System.currentTimeMillis());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
+    /**
+     * Handles cases where no handler is found for a given request by returning a NOT_FOUND response.
+     *
+     * @param ex the NoHandlerFoundException thrown when no handler is found
+     * @param request the HttpServletRequest that resulted in the exception
+     * @return a ResponseEntity containing error details and a NOT_FOUND status
+     */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNoHandlerFoundException(
             NoHandlerFoundException ex, HttpServletRequest request) {
@@ -145,6 +193,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Handles CustomerNotFoundException by returning a NOT_FOUND response with error details.
+     *
+     * @param ex the CustomerNotFoundException thrown when a customer is not found
+     * @return a ResponseEntity with a map containing the error status, message, and timestamp
+     */
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleCustomerNotFound(CustomerNotFoundException ex) {
         Map<String, Object> errorResponse = new HashMap<>();
@@ -154,6 +208,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
+    /**
+     * Handles NullArgumentException by returning a BAD_REQUEST response with error details.
+     *
+     * @param ex the NullArgumentException that occurred
+     * @return a ResponseEntity with a map containing error details and a BAD_REQUEST status
+     */
     @ExceptionHandler(NullArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Map<String, Object>> handleNullArgumentException(NullArgumentException ex) {
@@ -165,6 +225,12 @@ public class GlobalExceptionHandler {
 
     }
 
+    /**
+     * Handles InvalidEmailException by returning a BAD_REQUEST response with error details.
+     *
+     * @param ex the InvalidEmailException that occurred
+     * @return a ResponseEntity containing a map with error information and a BAD_REQUEST status
+     */
     @ExceptionHandler(InvalidEmailException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidEmailException(InvalidEmailException ex) {
         Map<String, Object> errorResponse = new HashMap<>();
@@ -174,6 +240,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Handles InvalidPhoneException by returning a BAD_REQUEST response with error details.
+     *
+     * @param ex the InvalidPhoneException that occurred
+     * @return a ResponseEntity containing a map with error details and a BAD_REQUEST status
+     */
     @ExceptionHandler(InvalidPhoneException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidPhoneException(InvalidPhoneException ex) {
         Map<String, Object> errorResponse = new HashMap<>();
@@ -183,6 +255,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Handles InvalidPurchaseAmountException by returning a BAD_REQUEST response with error details.
+     *
+     * @param ex the InvalidPurchaseAmountException that occurred
+     * @return a ResponseEntity containing a map with error details and a BAD_REQUEST status
+     */
     @ExceptionHandler(InvalidPurchaseAmountException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidPurchaseAmount(InvalidPurchaseAmountException ex) {
 
@@ -193,6 +271,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Handles InvalidPatternException by returning a BAD_REQUEST response with error details.
+     *
+     * @param ex the InvalidPatternException that occurred
+     * @return a ResponseEntity containing a map of error details with a BAD_REQUEST status
+     */
     @ExceptionHandler(InvalidPatternException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidPatternException(InvalidPatternException ex) {
         Map<String, Object> errorResponse = new HashMap<>();
@@ -202,6 +286,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Handles InvalidDateFormatException by returning a BAD_REQUEST response with error details.
+     *
+     * @param ex the InvalidDateFormatException that occurred
+     * @return a ResponseEntity containing a map with error details and a BAD_REQUEST status
+     */
     @ExceptionHandler(InvalidDateFormatException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidDateFormat(InvalidDateFormatException ex) {
         Map<String, Object> errorResponse = new HashMap<>();

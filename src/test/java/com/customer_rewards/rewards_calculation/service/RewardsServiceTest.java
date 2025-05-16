@@ -325,7 +325,7 @@ public class RewardsServiceTest {
         CustomerTransactionsDto response = rewardService.getCustomerMonthlyRewards(customerId);
 
         //Then
-        assertEquals(2, response.getMonthlyRecords().size()); // Two transactions should be included
+        assertEquals(2, response.getMonthlyRecords().size());
         assertTrue(response.getTotalRewards() > 0);
     }
 
@@ -387,7 +387,7 @@ public class RewardsServiceTest {
     }
 
     /**
-     * Tests that an empty first name (i.e., a blank string) throws a {@code NullArgumentException}.
+     * Tests that an empty first name (blank string) throws a {@code NullArgumentException}.
      */
     @Test
     public void testCreateCustomer_EmptyFirstName_ShouldThrowException() {
@@ -467,7 +467,7 @@ public class RewardsServiceTest {
     }
 
     /**
-     * Tests that an empty email (i.e., a blank string) triggers a {@code NullArgumentException}.
+     * Tests that an empty email (blank string) triggers a {@code NullArgumentException}.
      */
     @Test
     public void testCreateCustomer_EmptyEmail_ShouldThrowException() {
@@ -643,7 +643,7 @@ public class RewardsServiceTest {
     }
 
     /**
-     * Verifies that if the first name is empty (i.e. only whitespace), a {@code NullArgumentException} is thrown.
+     * Verifies that if the first name is empty (only whitespace), a {@code NullArgumentException} is thrown.
      */
     @Test
     public void testUpdateCustomer_EmptyFirstName_ShouldThrowException() {

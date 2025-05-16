@@ -143,14 +143,14 @@ mvn clean install
   "address": "123, Park Street",
   "monthlyRecords": [
     {
-      "purchaseDate": "2025-09-15",
-      "rewardPoints": 210.0
+      "rewardPoints": 30.0,
+      "date": "May 12, 2025"
     },
     {
-      "purchaseDate": "2025-05-15",
-      "rewardPoints": 150.0
+      "rewardPoints": 270.0,
+      "date": "June 25, 2025"
     }
   ],
-  "totalRewards": 360.0
+  "totalRewards": 300.0
 }
 ```

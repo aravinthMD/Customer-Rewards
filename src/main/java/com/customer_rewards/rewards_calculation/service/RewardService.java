@@ -38,8 +38,6 @@ public class RewardService {
     @Transactional
     public CustomerResponseDto createCustomer(CustomerRequestDto customerRequestDto){
 
-        String pattern = "^[A-Za-z]+$";
-
         if (customerRequestDto == null) {
             throw new NullArgumentException("Customer request cannot be null.");
         }
@@ -240,6 +238,7 @@ public class RewardService {
                         Collectors.mapping(
                                 tx -> new MonthlyRewardDto(
                                         tx.getPurchaseDate(),
+                                        tx.getPurchaseDate().toLocalDate(),
                                         calculateRewardPoints(tx.getPurchaseAmount())
                                 ),
                                 Collectors.toList()
@@ -252,7 +251,8 @@ public class RewardService {
 
         List<MonthlyRewardDto> monthlyRecords = monthlyAggregates.entrySet().stream()
                 .flatMap(entry -> entry.getValue().stream())
-                .sorted(Comparator.comparing(MonthlyRewardDto::getPurchaseDate).reversed())
+                .sorted(Comparator.comparing(MonthlyRewardDto::getPurchaseDate)
+                        .thenComparing(MonthlyRewardDto::getFormattedDate))
                 .collect(Collectors.toList());
 
         return new CustomerTransactionsDto(

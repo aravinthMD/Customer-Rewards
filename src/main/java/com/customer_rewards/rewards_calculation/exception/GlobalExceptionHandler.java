@@ -194,8 +194,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidPatternException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Map<String, Object>> handleInvalidPatternException(InvalidPatternException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("timestamp", System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidDateFormatException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidDateFormat(InvalidDateFormatException ex) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("status", "error");
         errorResponse.put("error", ex.getMessage());

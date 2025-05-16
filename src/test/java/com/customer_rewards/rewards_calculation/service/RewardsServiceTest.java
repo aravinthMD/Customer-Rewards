@@ -6,6 +6,7 @@ import com.customer_rewards.rewards_calculation.entity.CustomerRewards;
 import com.customer_rewards.rewards_calculation.exception.customException.*;
 import com.customer_rewards.rewards_calculation.repository.CustomerRepository;
 import com.customer_rewards.rewards_calculation.repository.CustomerRewardRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Reward Service Test Suite")
 public class RewardsServiceTest {
 
     @Mock
@@ -40,6 +42,7 @@ public class RewardsServiceTest {
      * Ensures that rewards are correctly calculated and saved.
      */
     @Test
+    @DisplayName("Should create rewards successfully and return a valid TransactionResponseDto")
     public void testCreateRewards_Success() {
 
         //Given
@@ -74,6 +77,7 @@ public class RewardsServiceTest {
      * Ensures that a default purchase date is correctly assigned.
      */
     @Test
+    @DisplayName("Create Rewards: When purchase date is null, set default date and calculate rewards correctly")
     public void testCreateRewards_WithNullPurchaseDate_ShouldSetDefaultDateAndCalculateRewards() {
         // Given
         Long customerId = 1L;
@@ -120,6 +124,7 @@ public class RewardsServiceTest {
      * Expects an exception when customer is not found in the repository.
      */
     @Test
+    @DisplayName("Should throw CustomerNotFoundException when customer is not found during reward creation")
     public void testCreateRewards_CustomerNotFound() {
         // Given
         Long customerId = 2L;
@@ -141,6 +146,7 @@ public class RewardsServiceTest {
      * Expects an exception when customer ID is not provided.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when customer ID is null during reward creation")
     public void testCreateRewards_NullCustomerId_ShouldThrowException() {
 
         //When
@@ -156,6 +162,7 @@ public class RewardsServiceTest {
      * Expects an exception when transaction request is missing.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when TransactionRequest is null during reward creation")
     public void testCreateRewards_NullTransactionRequest_ShouldThrowException() {
 
         //Given
@@ -173,6 +180,7 @@ public class RewardsServiceTest {
      * Expects an exception when purchase amount is not provided.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when purchase amount is null")
     public void testCreateRewards_NullPurchaseAmount_ShouldThrowException() {
 
         //Given
@@ -193,6 +201,7 @@ public class RewardsServiceTest {
      * Expects an exception when purchase amount is invalid.
      */
     @Test
+    @DisplayName("Should throw InvalidPurchaseAmountException when purchase amount is zero")
     public void testCreateRewards_InvalidPurchaseAmount_ShouldThrowException() {
 
         //Given
@@ -211,6 +220,7 @@ public class RewardsServiceTest {
      * Tests successful retrieval of monthly transactions.
      */
     @Test
+    @DisplayName("Should retrieve valid monthly rewards for customer from recent transactions")
     public void testGetCustomerMonthlyRewards_success() {
         // Given
         Long customerId = 1L;
@@ -259,6 +269,7 @@ public class RewardsServiceTest {
      * Expects an exception when customer is not found in the repository.
      */
     @Test
+    @DisplayName("Should throw CustomerNotFoundException when customer is not found")
     public void testGetCustomerMonthlyRewards_CustomerNotFound() {
         // given
         Long customerId = 5L;
@@ -276,6 +287,7 @@ public class RewardsServiceTest {
      * Expects an exception when customer ID is missing.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when customer ID is null")
     public void testGetCustomerMonthlyRewards_NullCustomerId_ShouldThrowException() {
 
         //When && Then
@@ -290,6 +302,7 @@ public class RewardsServiceTest {
      * Expects a valid response with empty monthly records and zero reward points.
      */
     @Test
+    @DisplayName("Should return empty rewards details when customer has no transactions")
     public void testGetCustomerMonthlyRewards_NoTransactions() {
 
         //Given
@@ -314,6 +327,7 @@ public class RewardsServiceTest {
      * Ensures correct mapping and filtering logic for rewards per month.
      */
     @Test
+    @DisplayName("Should correctly aggregate monthly rewards for customer transactions")
     public void testGetCustomerMonthlyRewards_AggregationValidation() {
 
         //Given
@@ -378,6 +392,7 @@ public class RewardsServiceTest {
      * Tests that passing a null CustomerRequestDto results in a {@code NullArgumentException}.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when attempting to create a customer with a null request")
     public void testCreateCustomer_NullRequest_ShouldThrowException() {
 
         //When && Then
@@ -390,6 +405,7 @@ public class RewardsServiceTest {
      * Tests that an empty first name (blank string) throws a {@code NullArgumentException}.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when attempting to create a customer with an empty first name")
     public void testCreateCustomer_EmptyFirstName_ShouldThrowException() {
 
         //Given
@@ -410,6 +426,7 @@ public class RewardsServiceTest {
      * Tests that a first name with invalid characters (e.g., containing digits) throws an {@code InvalidPatternException}.
      */
     @Test
+    @DisplayName("Should throw InvalidPatternException when first name contains invalid characters")
     public void testCreateCustomer_InvalidFirstName_ShouldThrowException() {
 
         //Given
@@ -430,6 +447,7 @@ public class RewardsServiceTest {
      * Tests that an empty last name (blank string) causes a {@code NullArgumentException}.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when customer's last name is empty")
     public void testCreateCustomer_EmptyLastName_ShouldThrowException() {
 
         //Given
@@ -450,6 +468,7 @@ public class RewardsServiceTest {
      * Tests that a last name with invalid characters throws an {@code InvalidPatternException}.
      */
     @Test
+    @DisplayName("Should throw InvalidPatternException when last name contains invalid characters")
     public void testCreateCustomer_InvalidLastName_ShouldThrowException() {
 
         //Given
@@ -470,6 +489,7 @@ public class RewardsServiceTest {
      * Tests that an empty email (blank string) triggers a {@code NullArgumentException}.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when email is empty or blank")
     public void testCreateCustomer_EmptyEmail_ShouldThrowException() {
 
         //Given
@@ -490,6 +510,7 @@ public class RewardsServiceTest {
      * Tests that an invalid email format triggers an {@code InvalidEmailException}.
      */
     @Test
+    @DisplayName("Should throw InvalidEmailException when email format is invalid")
     public void testCreateCustomer_InvalidEmailFormat_ShouldThrowException() {
 
         //When
@@ -510,6 +531,7 @@ public class RewardsServiceTest {
      * Tests that an empty phone number throws a {@code NullArgumentException}.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when phone is empty or blank")
     public void testCreateCustomer_EmptyPhone_ShouldThrowException() {
 
         //given
@@ -530,6 +552,7 @@ public class RewardsServiceTest {
      * Tests that a phone number not matching the required 10-digit format throws an {@code InvalidPhoneException}.
      */
     @Test
+    @DisplayName("Should throw InvalidPhoneException when the phone number format is invalid")
     public void testCreateCustomer_InvalidPhoneFormat_ShouldThrowException() {
 
         //Given
@@ -551,6 +574,7 @@ public class RewardsServiceTest {
      * Tests that if the User already exists in the repository, a {@code UserAlreadyExistsException} is thrown.
      */
     @Test
+    @DisplayName("Should throw UserAlreadyExistsException when creating a customer with an existing email")
     public void testCreateCustomer_UserAlreadyExists_ShouldThrowException() {
         // Given
         CustomerRequestDto request = new CustomerRequestDto();
@@ -574,6 +598,7 @@ public class RewardsServiceTest {
      * and that the returned {@code CustomerResponseDto} is properly populated.
      */
     @Test
+    @DisplayName("Should successfully create a customer and return a valid CustomerResponseDto")
     public void testCreateCustomer_Success() {
 
         //Given
@@ -611,6 +636,7 @@ public class RewardsServiceTest {
      * Verifies that if a null {@code customerId} is provided, a {@code NullArgumentException} is thrown.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when updating a customer with a null ID")
     public void testUpdateCustomer_NullCustomerId_ShouldThrowException() {
 
         //Given
@@ -634,6 +660,7 @@ public class RewardsServiceTest {
      * Verifies that if a null {@code CustomerRequestDto} is provided, a {@code NullArgumentException} is thrown.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when updating a customer with a null request")
     public void testUpdateCustomer_NullCustomerRequest_ShouldThrowException() {
 
         //When && Then
@@ -646,6 +673,7 @@ public class RewardsServiceTest {
      * Verifies that if the first name is empty (only whitespace), a {@code NullArgumentException} is thrown.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when updating a customer with an empty first name")
     public void testUpdateCustomer_EmptyFirstName_ShouldThrowException() {
 
         //Given
@@ -667,6 +695,7 @@ public class RewardsServiceTest {
      * an {@code InvalidPatternException} is thrown.
      */
     @Test
+    @DisplayName("Should throw InvalidPatternException when updating a customer with an invalid first name format")
     public void testUpdateCustomer_InvalidFirstName_ShouldThrowException() {
 
         //Given
@@ -687,6 +716,7 @@ public class RewardsServiceTest {
      * Verifies that if the last name is empty, a {@code NullArgumentException} is thrown.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when updating a customer with an empty last name")
     public void testUpdateCustomer_EmptyLastName_ShouldThrowException() {
 
         //Given
@@ -708,6 +738,7 @@ public class RewardsServiceTest {
      * an {@code InvalidPatternException} is thrown.
      */
     @Test
+    @DisplayName("Should throw InvalidPatternException when updating a customer with an invalid last name format")
     public void testUpdateCustomer_InvalidLastName_ShouldThrowException() {
 
         //Given
@@ -728,6 +759,7 @@ public class RewardsServiceTest {
      * Verifies that if the email field is empty, a {@code NullArgumentException} is thrown.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when updating a customer with an empty or blank email")
     public void testUpdateCustomer_EmptyEmail_ShouldThrowException() {
 
         //Given
@@ -748,6 +780,7 @@ public class RewardsServiceTest {
      * Verifies that if the email format is invalid, an {@code InvalidEmailException} is thrown.
      */
     @Test
+    @DisplayName("Should throw InvalidEmailException when updating a customer with an invalid email format")
     public void testUpdateCustomer_InvalidEmailFormat_ShouldThrowException() {
 
         //Given
@@ -768,6 +801,7 @@ public class RewardsServiceTest {
      * Verifies that if the phone number is empty, a {@code NullArgumentException} is thrown.
      */
     @Test
+    @DisplayName("Should throw NullArgumentException when updating a customer with an empty or blank phone number")
     public void testUpdateCustomer_EmptyPhone_ShouldThrowException() {
 
         //Given
@@ -789,6 +823,7 @@ public class RewardsServiceTest {
      * an {@code InvalidPhoneException} is thrown.
      */
     @Test
+    @DisplayName("Should throw InvalidPhoneException when updating a customer with an invalid phone format")
     public void testUpdateCustomer_InvalidPhoneFormat_ShouldThrowException() {
 
         //Given
@@ -811,6 +846,7 @@ public class RewardsServiceTest {
      * and a properly populated {@code CustomerResponseDto} is returned.
      */
     @Test
+    @DisplayName("Should successfully update a customer and return the updated CustomerResponseDto")
     public void testUpdateCustomer_Success() {
         // Given
         Long customerId = 1L;
@@ -851,6 +887,7 @@ public class RewardsServiceTest {
      * Verifies that attempting to update a non-existing customer results in a {@code CustomerNotFoundException}.
      */
     @Test
+    @DisplayName("Should throw CustomerNotFoundException when updating a customer that does not exist")
     public void testUpdateCustomer_CustomerNotFound_ShouldThrowException() {
 
         //Given

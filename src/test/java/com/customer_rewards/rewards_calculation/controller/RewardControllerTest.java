@@ -5,6 +5,7 @@ import com.customer_rewards.rewards_calculation.exception.customException.Custom
 import com.customer_rewards.rewards_calculation.exception.customException.NullArgumentException;
 import com.customer_rewards.rewards_calculation.service.RewardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RewardController.class)
+@DisplayName("Reward Controller Test Suite")
 public class RewardControllerTest {
 
     @Autowired
@@ -40,6 +42,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during the request execution.
      */
     @Test
+    @DisplayName("Should successfully create a customer and return success status with customer data")
     public void testCreateCustomer_success() throws Exception {
         // Given
         CustomerRequestDto customerRequestDto = new CustomerRequestDto();
@@ -81,6 +84,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during the request execution.
      */
     @Test
+    @DisplayName("Should return BadRequest when creating a customer with missing first name")
     public void testCreateCustomer_invalidInput() throws Exception {
         // Given
         CustomerRequestDto invalidRequest = new CustomerRequestDto();
@@ -105,6 +109,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during request execution.
      */
     @Test
+    @DisplayName("Should successfully update a customer and return a success status with updated details")
     public void testUpdateCustomer_success() throws Exception {
         // Given
         long customerId = 1L;
@@ -148,6 +153,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during request execution.
      */
     @Test
+    @DisplayName("Should return BadRequest when updating a customer with invalid input (missing first name)")
     public void testUpdateCustomer_invalidInput() throws Exception {
         //Given
         long customerId = 1L;
@@ -176,6 +182,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during request execution.
      */
     @Test
+    @DisplayName("Should return NotFound status and error message when updating a non-existing customer")
     public void testUpdateCustomer_customerNotAvailable() throws Exception {
 
         //Given
@@ -207,6 +214,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during the test execution.
      */
     @Test
+    @DisplayName("Should successfully create rewards and return the transaction response with success status")
     public void testCreateRewards_success() throws Exception {
         //Given
         long customerId = 123L;
@@ -243,6 +251,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during the request execution.
      */
     @Test
+    @DisplayName("Should return BadRequest when creating rewards with an invalid purchase amount")
     public void testCreateRewards_invalidPurchaseAmount() throws Exception {
 
         //Given
@@ -267,6 +276,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during request execution.
      */
     @Test
+    @DisplayName("Should successfully retrieve monthly transactions with correct rewards details")
     public void testGetMonthlyTransactions_success() throws Exception {
 
         //Given
@@ -307,6 +317,7 @@ public class RewardControllerTest {
      * @throws Exception if an error occurs during request execution.
      */
     @Test
+    @DisplayName("Should return NotFound and an error message when monthly transactions are requested for a non-existing customer")
     public void testGetMonthlyTransactions_customerNotFound() throws Exception {
         long nonExistingCustomerId = 999L;
 

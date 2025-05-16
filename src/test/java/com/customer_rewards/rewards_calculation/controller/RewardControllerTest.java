@@ -2,6 +2,7 @@ package com.customer_rewards.rewards_calculation.controller;
 
 import com.customer_rewards.rewards_calculation.dto.*;
 import com.customer_rewards.rewards_calculation.exception.customException.CustomerNotFoundException;
+import com.customer_rewards.rewards_calculation.exception.customException.NullArgumentException;
 import com.customer_rewards.rewards_calculation.service.RewardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,11 @@ public class RewardControllerTest {
     @MockitoBean
     private RewardService customerRewardService;
 
+    /**
+     * Tests that a valid customer creation request returns a successful response.
+     *
+     * @throws Exception if an error occurs during the request execution.
+     */
     @Test
     public void testCreateCustomer_success() throws Exception {
         // Given
@@ -68,6 +74,12 @@ public class RewardControllerTest {
                 .andExpect(jsonPath("$.message").value("Customer created successfully."));
     }
 
+    /**
+     * Tests that a customer creation attempt with invalid input (missing first name)
+     * results in a Bad Request (400) response.
+     *
+     * @throws Exception if an error occurs during the request execution.
+     */
     @Test
     public void testCreateCustomer_invalidInput() throws Exception {
         // Given
@@ -77,6 +89,9 @@ public class RewardControllerTest {
 
         String requestBody = objectMapper.writeValueAsString(invalidRequest);
 
+        when(customerRewardService.createCustomer(any(CustomerRequestDto.class)))
+                .thenThrow(new NullArgumentException("First name cannot be empty"));
+
         // When & Then
         mockMvc.perform(post("/api/saveCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,6 +99,11 @@ public class RewardControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests a successful customer update via a PUT request.
+     *
+     * @throws Exception if an error occurs during request execution.
+     */
     @Test
     public void testUpdateCustomer_success() throws Exception {
         // Given
@@ -122,6 +142,11 @@ public class RewardControllerTest {
 
     }
 
+    /**
+     * Tests that a customer update with invalid input returns a Bad Request (400) status.
+     *
+     * @throws Exception if an error occurs during request execution.
+     */
     @Test
     public void testUpdateCustomer_invalidInput() throws Exception {
         //Given
@@ -133,6 +158,10 @@ public class RewardControllerTest {
 
         String requestBody = objectMapper.writeValueAsString(invalidRequest);
 
+        when(customerRewardService.updateCustomer(eq(customerId), any(CustomerRequestDto.class)))
+                .thenThrow(new NullArgumentException("First name cannot be empty"));
+
+
         // When & Then
         mockMvc.perform(put("/api/{customerId}/updateCustomer", customerId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -140,6 +169,12 @@ public class RewardControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests that an attempt to update a non-existent customer returns a 404 Not Found status
+     * along with the appropriate error message.
+     *
+     * @throws Exception if an error occurs during request execution.
+     */
     @Test
     public void testUpdateCustomer_customerNotAvailable() throws Exception {
 
@@ -165,6 +200,12 @@ public class RewardControllerTest {
                 .andExpect(jsonPath("$.error").value("Customer not found with id: " + nonExistingCustomerId));
     }
 
+    /**
+     * Tests that creating rewards for a customer returns a success response
+     * with the expected transaction details.
+     *
+     * @throws Exception if an error occurs during the test execution.
+     */
     @Test
     public void testCreateRewards_success() throws Exception {
         //Given
@@ -196,6 +237,11 @@ public class RewardControllerTest {
                 .andExpect(jsonPath("$.message").value("Transactions Saved successfully."));
     }
 
+    /**
+     * Tests that providing an invalid purchase amount results in a Bad Request (400) response.
+     *
+     * @throws Exception if an error occurs during the request execution.
+     */
     @Test
     public void testCreateRewards_invalidPurchaseAmount() throws Exception {
 
@@ -215,6 +261,11 @@ public class RewardControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Tests that the GET endpoint for monthly transactions returns the expected customer transactions data.
+     *
+     * @throws Exception if an error occurs during request execution.
+     */
     @Test
     public void testGetMonthlyTransactions_success() throws Exception {
 
@@ -249,6 +300,12 @@ public class RewardControllerTest {
                 .andExpect(jsonPath("$.monthlyRecords.length()").value(2));
     }
 
+    /**
+     * Tests that a GET request for monthly transactions with a non-existing customer ID
+     * returns a 404 Not Found status and the appropriate error message.
+     *
+     * @throws Exception if an error occurs during request execution.
+     */
     @Test
     public void testGetMonthlyTransactions_customerNotFound() throws Exception {
         long nonExistingCustomerId = 999L;
